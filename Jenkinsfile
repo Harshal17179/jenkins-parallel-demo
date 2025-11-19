@@ -6,16 +6,16 @@ pipeline {
             steps {
                 echo 'Stage: Checking out code from Git repository'
                 checkout scm
-                sh 'git --version'
+                bat 'git --version'
                 echo 'Repository cloned successfully'
             }
         }
-        
+
         stage('Build') {
             steps {
                 echo 'Stage: Building the application'
-                sh 'npm install'
-                sh 'npm run build'
+                bat 'npm install'
+                bat 'npm run build'
                 echo 'Build completed successfully'
             }
         }
@@ -25,13 +25,12 @@ pipeline {
                 stage('Unit Tests') {
                     steps {
                         echo 'Parallel Branch: Running Unit Tests'
-                        sh 'npm run test:unit'
+                        bat 'npm run test:unit'
                         echo 'Unit tests completed'
                     }
                     post {
                         always {
                             echo 'Unit Tests stage completed'
-                            // Archive test results if needed
                             archiveArtifacts artifacts: 'coverage/**/*', allowEmptyArchive: true
                         }
                     }
@@ -40,7 +39,7 @@ pipeline {
                 stage('Integration Tests') {
                     steps {
                         echo 'Parallel Branch: Running Integration Tests'
-                        sh 'npm run test:integration'
+                        bat 'npm run test:integration'
                         echo 'Integration tests completed'
                     }
                     post {
@@ -53,7 +52,7 @@ pipeline {
                 stage('Code Quality Check') {
                     steps {
                         echo 'Parallel Branch: Running Code Quality Checks'
-                        sh 'npm run quality'
+                        bat 'npm run quality'
                         echo 'Code quality check completed'
                     }
                     post {
@@ -73,8 +72,8 @@ pipeline {
             }
             steps {
                 echo 'Stage: Deploying application (runs only if all parallel stages succeed)'
-                sh 'echo "Deployment would happen here"'
-                sh 'echo "All parallel stages completed successfully - proceeding with deployment"'
+                bat 'echo "Deployment would happen here"'
+                bat 'echo "All parallel stages completed successfully - proceeding with deployment"'
                 archiveArtifacts artifacts: '**/*', excludes: 'node_modules/**,coverage/**,.git/**'
             }
         }
@@ -88,8 +87,6 @@ pipeline {
             echo "Build Number: ${env.BUILD_NUMBER}"
             echo "Build Duration: ${currentBuild.durationString}"
             echo '=========================================='
-            // Clean workspace if needed
-            // cleanWs()
         }
         success {
             echo 'Pipeline executed successfully!'
@@ -98,7 +95,6 @@ pipeline {
         failure {
             echo 'Pipeline failed!'
             echo 'One or more stages failed'
-            // Send notifications, etc.
         }
         unstable {
             echo 'Pipeline is unstable'
@@ -106,4 +102,3 @@ pipeline {
         }
     }
 }
-
