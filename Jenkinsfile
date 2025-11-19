@@ -5,6 +5,7 @@ pipeline {
 
         stage('Parallel Tests') {
             parallel {
+
                 stage('Unit Tests') {
                     steps {
                         sh 'echo Running Unit Tests'
@@ -29,21 +30,20 @@ pipeline {
         }
 
         stage('After All Success') {
-            when {
-                succeeded()
-            }
             steps {
-                echo "All tests passed successfully!"
+                script {
+                    echo "This stage runs only if all parallel stages are successful."
+                }
             }
         }
     }
 
     post {
         always {
-            echo "Pipeline completed (always)."
+            echo "Pipeline finished (always)."
         }
         success {
-            echo "Pipeline succeeded!"
+            echo "Pipeline success!"
         }
         failure {
             echo "Pipeline failed!"
