@@ -1,0 +1,10 @@
+{
+  "name": "jenkins-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo Build Success",
+    "test:unit": "echo Running Unit Tests",
+    "test:integration": "echo Running Integration Tests",
+    "quality": "echo Code Quality Check Done"
+  }
+}
